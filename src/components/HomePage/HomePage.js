@@ -10,16 +10,16 @@ const styles = theme => ({
 	  },
 	paper: {
 		padding: theme.spacing(3),
-    	textAlign: 'center',
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center'
+		alignItems: 'center',
+		height: '100%'
 	},
 	grid:{
 		padding: '0px'
 	},
 	submit: {
-		marginTop: theme.spacing.unit * 3,
+		marginTop: theme.spacing(3),
 	},
 	wrapper: {
 		padding: theme.spacing(2)
@@ -109,10 +109,10 @@ function HomePage(props) {
 					Os órgãos de fomento (caso existam) devem ser exibidos nos cantos superiores ou inferiores, direito ou esquerdo.
 					Deve conter as referências significativas.
 					</Typography>
-					<Typography component="p" variant="body1" style={{textAlign:'left'}}>
+					<Typography style={{textAlign:'left'}} component="p" variant="body1" >
 					O trabalho deve ter conteúdo autoexplicativo, já que a categoria “Pôster” será expositiva e não apresentada.
 					</Typography>
-					<Typography component="p" variant="body1" style={{textAlign:'left'}}>
+					<Typography style={{textAlign:'left'}} component="p" variant="body1">
 					A confecção e impressão dos pôsteres é de responsabilidade do(s) autor(es), bem como o transporte do mesmo.
 					</Typography>
 				</Paper>
