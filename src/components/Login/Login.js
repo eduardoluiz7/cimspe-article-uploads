@@ -22,6 +22,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+		marginTop: '50%',
 		padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
 	},
 	avatar: {
@@ -71,7 +72,14 @@ function SignIn(props) {
 						Entrar
           			</Button>
 				</form>
+				<Typography style={{marginTop: '20px'}}>Novo aqui? <a style={{textDecoration: 'none', fontWeight: 'bold', color: '#f50057'}} href='http://cimspe.com/#inscricao'>Se inscreva!</a></Typography>
 			</Paper>
+			<div style={{marginLeft: 'auto',
+				marginTop: '10px',
+				textAlign: 'center'
+				}}>
+				<h5>Problemas com o login? Envie email para sitecimespe@gmail.com</h5>
+			</div>
 		</main>
 	)
 
