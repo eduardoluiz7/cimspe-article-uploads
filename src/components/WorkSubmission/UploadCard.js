@@ -27,24 +27,30 @@ class UploadCard extends Component {
     }
   }
   handleUpload = () => {
-      const {file} = this.state;
-      const uploadTask = firebase.fazStorage(file);
-      uploadTask.on('state_changed', 
-      (snapshot) => {
-        // progrss function ....
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        this.setState({progress});
-        console.log(this.state)
-        if(this.state.progress === 100){
-            this.setState({open:true})
-        }
-        console.log(this.state)
-      }, 
-      (error) => {
-           // error function ....
-        alert("Erro ao enviar arquivo!");
-      });
+      if(this.state.file === null){
+        alert("Insira um arquivo")
+      }else{
+        const {file} = this.state;
+        const uploadTask = firebase.fazStorage(file);
+        uploadTask.on('state_changed', 
+        (snapshot) => {
+          // progrss function ....
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          this.setState({progress});
+          console.log(this.state)
+          if(this.state.progress === 100){
+              this.setState({open:true})
+          }
+          console.log(this.state)
+        }, 
+        (error) => {
+            // error function ....
+          alert("Erro ao enviar arquivo!");
+          console.log(error.message)
+        });
+      }
   }
+  
   render() {
     if(!firebase.getCurrentUsername()) {
       // not logged in
@@ -54,8 +60,8 @@ class UploadCard extends Component {
       } 
      
     const style = {
-      width: '500px',
-      height: '60vh',
+      width: '450px',
+      height: '500px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -96,9 +102,9 @@ class UploadCard extends Component {
         <Paper style={style}>
             <div>
                 <Typography component="h1" variant="h5">Submissão de Trabalhos</Typography>
-                <input type="file" onChange={this.handleChange}/>
-                <Button onClick={this.handleUpload}>Upload</Button>
-                <Button
+                <input style={{marginRight: '20%'}}  type="file" onChange={this.handleChange}/>
+                <Button variant='contained' color='primary' onClick={this.handleUpload}>Upload</Button>
+                <Button variant='contained' color='secondary'
                 component={Link}
                 to="/homepage">Voltar</Button>
                 <Snackbar
@@ -114,7 +120,6 @@ class UploadCard extends Component {
       </div>
         </Paper>
       </div>
-
     )
   }
 }
