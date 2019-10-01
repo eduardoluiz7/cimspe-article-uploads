@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import firebase from '../../firebase/firebase'
 import {Paper, Typography, Button, Snackbar, Toolbar} from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 class UploadCard extends Component {
   constructor(props) {
@@ -41,10 +42,17 @@ class UploadCard extends Component {
       }, 
       (error) => {
            // error function ....
-        console.log(error);
+        alert("Erro ao enviar arquivo!");
       });
   }
   render() {
+    if(!firebase.getCurrentUsername()) {
+      // not logged in
+      alert('Realize Login!')
+      this.props.history.replace('/')
+      return null
+      } 
+     
     const style = {
       width: '500px',
       height: '60vh',
@@ -65,6 +73,7 @@ class UploadCard extends Component {
 
     const handleClose = () => {
         this.setState({open: false });
+        this.props.history.push('/homepage')
       };
 
     return (
@@ -89,7 +98,9 @@ class UploadCard extends Component {
                 <Typography component="h1" variant="h5">Submissão de Trabalhos</Typography>
                 <input type="file" onChange={this.handleChange}/>
                 <Button onClick={this.handleUpload}>Upload</Button>
-                <Button>Voltar</Button>
+                <Button
+                component={Link}
+                to="/homepage">Voltar</Button>
                 <Snackbar
                 anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
                 open={this.state.open}
@@ -98,7 +109,7 @@ class UploadCard extends Component {
                 'aria-describedby': 'message-id',
                 }}
                 message={<span id="message-id">Enviado com sucesso!</span>}
-                autoHideDuration={5000}
+                autoHideDuration={2000}
             />
       </div>
         </Paper>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import HomePage from './HomePage/HomePage'
 import Login from './Login/Login'
-import WorkSubmission from './WorkSubmission/WorkSubmission'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { CssBaseline, CircularProgress } from '@material-ui/core'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -29,8 +28,7 @@ export default function App() {
 				<Switch>
 					<Route exact path="/homepage" component={HomePage} />
 					<Route exact path="/" component={Login} />
-					<Route exact path="/submeterTrabalhos" component={WorkSubmission} />
-					<Route exact path="/teste" component={UploadCard} />
+					<Route exact path="/submeterTrabalhos" component={UploadCard} />
 				</Switch>
 			</Router>
 		</MuiThemeProvider>
