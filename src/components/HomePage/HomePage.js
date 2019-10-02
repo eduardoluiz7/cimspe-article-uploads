@@ -28,11 +28,10 @@ const styles = theme => ({
 
 function HomePage(props) {
 	const { classes } = props
-    console.log(firebase.getCurrentUsername())
 	
 	if(!firebase.getCurrentUsername()) {
 		// not logged in
-		alert('Please login first')
+		alert('Realize login!')
 		props.history.replace('/')
 		return null
     } 

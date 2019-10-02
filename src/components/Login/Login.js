@@ -21,7 +21,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		marginTop: '50%',
+		marginTop: '30%',
 		padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
 	},
 	avatar: {
@@ -77,7 +77,7 @@ function SignIn(props) {
 				marginTop: '10px',
 				textAlign: 'center'
 				}}>
-				<h5>Problemas com o login? Envie email para sitecimespe@gmail.com</h5>
+				<h5>Problemas com o login? Envie email para sitecimspe@gmail.com</h5>
 			</div>
 		</main>
 	)

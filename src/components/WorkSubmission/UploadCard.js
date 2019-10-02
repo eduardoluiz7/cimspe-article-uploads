@@ -1,9 +1,20 @@
 import React, {Component} from 'react';
 import firebase from '../../firebase/firebase'
-import {Paper, Typography, Button, Snackbar, Toolbar} from '@material-ui/core'
+import {Paper, Typography, Button, Snackbar, Toolbar, Select, FormControl, InputLabel, MenuItem} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 class UploadCard extends Component {
+  tipos = [
+    {
+      name: "Resumo Simples"
+    },
+    {
+      name: "Resumo Estendido"
+    },
+    {
+      name: "Artigo"
+    }
+  ];
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +23,8 @@ class UploadCard extends Component {
       progress: 0,
       open: false,
       vertical: 'bottom',
-      horizontal: 'center'
+      horizontal: 'center',
+      tipo: ''
     }
 
     this.handleChange = this
@@ -27,8 +39,8 @@ class UploadCard extends Component {
     }
   }
   handleUpload = () => {
-      if(this.state.file === null){
-        alert("Insira um arquivo")
+      if(this.state.file === null || this.state.tipo ===''){
+        alert("Insira um arquivo e o tipo de submissão")
       }else{
         const {file} = this.state;
         const uploadTask = firebase.fazStorage(file);
@@ -37,11 +49,15 @@ class UploadCard extends Component {
           // progrss function ....
           const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
           this.setState({progress});
-          console.log(this.state)
           if(this.state.progress === 100){
               this.setState({open:true})
           }
-          console.log(this.state)
+          firebase.addSubmission({
+            tipo:this.state.tipo,
+            data: new Date()
+          }).then(()=>{
+            console.log("saved")
+          })
         }, 
         (error) => {
             // error function ....
@@ -61,7 +77,7 @@ class UploadCard extends Component {
      
     const style = {
       width: '450px',
-      height: '500px',
+      height: '400px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -69,7 +85,7 @@ class UploadCard extends Component {
       alignText: 'center',
       alignSelf: 'center',
       margin: 'auto',
-      marginTop: '8%'
+      marginTop: 'auto'
     };
 
     async function logout() {
@@ -80,6 +96,14 @@ class UploadCard extends Component {
     const handleClose = () => {
         this.setState({open: false });
         this.props.history.push('/homepage')
+      };
+
+    const tipoSelected = event => {
+        this.setState(() => {
+          return {
+            tipo: event.target.value
+          }
+        })
       };
 
     return (
@@ -100,13 +124,30 @@ class UploadCard extends Component {
             </Button>
         </Toolbar>
         <Paper style={style}>
-            <div>
-                <Typography component="h1" variant="h5">Submissão de Trabalhos</Typography>
-                <input style={{marginRight: '20%'}}  type="file" onChange={this.handleChange}/>
-                <Button variant='contained' color='primary' onClick={this.handleUpload}>Upload</Button>
-                <Button variant='contained' color='secondary'
-                component={Link}
-                to="/homepage">Voltar</Button>
+                <Typography style={{marginBottom: '40px'}} component="h1" variant="h5">Submissão de Trabalhos</Typography>
+                <form>
+                  <FormControl style={{width: '300px', margin: '20px'}}>
+                    <InputLabel htmlFor="tipos">Tipo</InputLabel>
+                    <Select
+                      value={this.state.tipo}
+                      onChange={tipoSelected}
+                    >
+                      {this.tipos.map(tipo => (
+                        <MenuItem value={tipo.name} key={tipo.name}>
+                          {tipo.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </form>
+                
+                <input style={{margin: '10px'}}  type="file" onChange={this.handleChange}/>
+                <div>
+                  <Button style={{margin:'10px'}} variant='contained' color='secondary'
+                  component={Link}
+                  to="/homepage">Voltar</Button>
+                  <Button style={{margin:'10px'}} variant='contained' color='primary' onClick={this.handleUpload}>Enviar</Button>
+                </div>
                 <Snackbar
                 anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
                 open={this.state.open}
@@ -117,7 +158,6 @@ class UploadCard extends Component {
                 message={<span id="message-id">Enviado com sucesso!</span>}
                 autoHideDuration={2000}
             />
-      </div>
         </Paper>
       </div>
     )
