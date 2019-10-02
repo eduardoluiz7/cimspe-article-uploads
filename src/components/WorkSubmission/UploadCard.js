@@ -4,17 +4,9 @@ import {Paper, Typography, Button, Snackbar, Toolbar, Select, FormControl, Input
 import { Link } from 'react-router-dom'
 
 class UploadCard extends Component {
-  tipos = [
-    {
-      name: "Resumo Simples"
-    },
-    {
-      name: "Resumo Estendido"
-    },
-    {
-      name: "Artigo"
-    }
-  ];
+  tipos = [{name: "Resumo Simples"},{name: "Resumo Estendido"},{name: "Artigo"}];
+  categorias = [{name: "Oral"},{name: "Poster"}];
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +16,9 @@ class UploadCard extends Component {
       open: false,
       vertical: 'bottom',
       horizontal: 'center',
-      tipo: ''
+      tipo: '',
+      categoria:'',
+      isResumoSimples: true
     }
 
     this.handleChange = this
@@ -42,6 +36,17 @@ class UploadCard extends Component {
       if(this.state.file === null || this.state.tipo ===''){
         alert("Insira um arquivo e o tipo de submissão")
       }else{
+        firebase.addSubmission({
+          userName: firebase.getCurrentUsername(),
+          userId: firebase.getCurrentUserId(),
+          email: firebase.getCurrentUserEmail(),
+          arquivo: this.state.file.name,
+          tipo:this.state.tipo,
+          data: new Date(),
+          categoria: this.state.categoria
+        }).then(()=>{
+          console.log("saved")
+        })
         const {file} = this.state;
         const uploadTask = firebase.fazStorage(file);
         uploadTask.on('state_changed', 
@@ -52,12 +57,6 @@ class UploadCard extends Component {
           if(this.state.progress === 100){
               this.setState({open:true})
           }
-          firebase.addSubmission({
-            tipo:this.state.tipo,
-            data: new Date()
-          }).then(()=>{
-            console.log("saved")
-          })
         }, 
         (error) => {
             // error function ....
@@ -99,12 +98,26 @@ class UploadCard extends Component {
       };
 
     const tipoSelected = event => {
+        if(event.target.value === 'Resumo Estendido' || event.target.value === 'Artigo'){
+          this.setState({isResumoSimples: false});
+        }
+        if(event.target.value === 'Resumo Simples'){
+          this.setState({isResumoSimples: true, categoria: ''});
+        }
         this.setState(() => {
           return {
             tipo: event.target.value
           }
         })
       };
+    
+    const categoriaSelected = event => {
+      this.setState(() => {
+        return {
+          categoria: event.target.value
+        }
+      })
+    };
 
     return (
 
@@ -126,7 +139,7 @@ class UploadCard extends Component {
         <Paper style={style}>
                 <Typography style={{marginBottom: '40px'}} component="h1" variant="h5">Submissão de Trabalhos</Typography>
                 <form>
-                  <FormControl style={{width: '300px', margin: '20px'}}>
+                  <FormControl style={{width: '300px', marginLeft: '65px', marginBottom: '20px'}}>
                     <InputLabel htmlFor="tipos">Tipo</InputLabel>
                     <Select
                       value={this.state.tipo}
@@ -139,10 +152,24 @@ class UploadCard extends Component {
                       ))}
                     </Select>
                   </FormControl>
+                  <FormControl style={{width: '300px', marginLeft: '65px', marginBottom: '20px'}}>
+                    <InputLabel htmlFor="categorias">Categoria</InputLabel>
+                    <Select
+                      value={this.state.categoria}
+                      onChange={categoriaSelected}
+                      disabled={this.state.isResumoSimples}
+                    >
+                      {this.categorias.map(cat => (
+                        <MenuItem value={cat.name} key={cat.name}>
+                          {cat.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </form>
                 
                 <input style={{margin: '10px'}}  type="file" onChange={this.handleChange}/>
-                <div>
+                <div style={{marginTop: '20px'}}>
                   <Button style={{margin:'10px'}} variant='contained' color='secondary'
                   component={Link}
                   to="/homepage">Voltar</Button>

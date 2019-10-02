@@ -46,10 +46,19 @@ class Firebase {
 			return alert('Not authorized')
 		}
 
-		return this.db.doc(`users_cimspe/${this.auth.currentUser.uid}`).set({
+		return this.db.collection('users_cimspe').add({
 			submission
 		})
 	}
+
+	getCurrentUserId(){
+		return this.auth.currentUser.uid
+	}
+
+	getCurrentUserEmail(){
+		return this.auth.currentUser.email
+	}
+
 
 	isInitialized() {
 		return new Promise(resolve => {
@@ -67,7 +76,7 @@ class Firebase {
 	}
 
 	fazStorage(file){
-		return this.storage.ref(`submissoes/${this.auth.currentUser.uid}/${file.name}`).put(file)
+		return this.storage.ref(`submissoes/${this.auth.currentUser.email}/${file.name}`).put(file)
 	}
 }
 
