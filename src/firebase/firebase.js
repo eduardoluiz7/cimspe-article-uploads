@@ -46,9 +46,9 @@ class Firebase {
 			return alert('Not authorized')
 		}
 
-		return this.db.collection('users_cimspe').add({
+		return this.db.doc(`users_cimspe/${this.auth.currentUser.uid}`).set({
 			submission
-		})
+		},{merge: true})
 	}
 
 	getCurrentUserId(){
@@ -71,12 +71,12 @@ class Firebase {
 	}
 
 	async getCurrentUserSubmissions() {
-		const submissions = await this.db.doc(`users_cimspe/${this.auth.currentUser.uid}`).get()
-		return submissions.get()
+		const submission = await this.db.doc(`users_cimspe/${this.auth.currentUser.uid}`).get().then(data=> data)
+		return submission.get('submission')
 	}
 
 	fazStorage(file){
-		return this.storage.ref(`submissoes/${this.auth.currentUser.email}/${file.name}`).put(file)
+		return this.storage.ref(`submissoes/${this.auth.currentUser.uid}/${file.name}`).put(file)
 	}
 }
 

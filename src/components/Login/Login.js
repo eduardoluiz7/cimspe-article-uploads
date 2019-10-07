@@ -39,9 +39,9 @@ const styles = theme => ({
 
 function SignIn(props) {
 	const { classes } = props
-
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+
 
 	return (
 		<main className={classes.main}>

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 class UploadCard extends Component {
   tipos = [{name: "Resumo Simples"},{name: "Resumo Estendido"},{name: "Artigo"}];
   categorias = [{name: "Oral"},{name: "Poster"}];
-
+  submissoes = []
   constructor(props) {
     super(props);
     this.state = {
@@ -21,30 +21,52 @@ class UploadCard extends Component {
       isResumoSimples: true
     }
 
+
+    firebase.getCurrentUserSubmissions().then((algo)=>{
+      if(!(typeof algo) === "undefined"){
+        this.submissoes = algo.submissao
+      }
+    }).catch(erro =>{
+      console.log("We have an error: " + erro.message)
+      this.submissoes = []
+    });
+
     this.handleChange = this
       .handleChange
       .bind(this);
       this.handleUpload = this.handleUpload.bind(this);
   }
+
   handleChange = e => {
     if (e.target.files[0]) {
       const file = e.target.files[0];
       this.setState(() => ({file}));
     }
   }
+
+  logout = async ()=> {
+    await firebase.logout()
+    localStorage.clear();
+    this.props.history.push('/')
+}
+
   handleUpload = () => {
       if(this.state.file === null || this.state.tipo ===''){
         alert("Insira um arquivo e o tipo de submissão")
       }else{
+
+        this.submissoes.push({arquivo: this.state.file.name,
+          tipo:this.state.tipo,
+          data: new Date(),
+          categoria: this.state.categoria})
+
         firebase.addSubmission({
           userName: firebase.getCurrentUsername(),
           userId: firebase.getCurrentUserId(),
           email: firebase.getCurrentUserEmail(),
-          arquivo: this.state.file.name,
-          tipo:this.state.tipo,
-          data: new Date(),
-          categoria: this.state.categoria
+          submissao: this.submissoes
         }).then(()=>{
+
           console.log("saved")
         })
         const {file} = this.state;
@@ -87,11 +109,6 @@ class UploadCard extends Component {
       marginTop: 'auto'
     };
 
-    async function logout() {
-		await firebase.logout()
-		this.props.history.push('/')
-    }
-
     const handleClose = () => {
         this.setState({open: false });
         this.props.history.push('/homepage')
@@ -131,7 +148,7 @@ class UploadCard extends Component {
                 style={{marginLeft:'auto',
                 color:'white'}}
                 type="submit"
-                onClick={logout}
+                onClick={this.logout}
                 >
                 Sair
             </Button>

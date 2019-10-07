@@ -20,7 +20,6 @@ export default function App() {
 		})
 	})
 
-
 	return firebaseInitialized !== false ? (
 		<MuiThemeProvider theme={theme}>
 			<CssBaseline />

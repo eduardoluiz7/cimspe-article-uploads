@@ -1,58 +1,62 @@
-import React from 'react'
+import React, { Component } from 'react';
 import { Typography, Paper, Grid, Button, Toolbar } from '@material-ui/core'
-import withStyles from '@material-ui/core/styles/withStyles'
 import firebase from '../../firebase/firebase'
 import { withRouter, Link } from 'react-router-dom'
 
-const styles = theme => ({
-	root: {
-		flexGrow: 1,
-	  },
-	paper: {
-		padding: theme.spacing(3),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		height: '100%'
-	},
-	grid:{
-		padding: '0px'
-	},
-	submit: {
-		marginTop: theme.spacing(3),
-	},
-	wrapper: {
-		padding: theme.spacing(2)
-	}
-})
+class Home extends Component {
+    state = { userData: {},
+              userEmail: ''}
 
-const HomePage = (props) => {
-	firebase.getCurrentUserSubmissions().then((algo)=>{
-		// userEnvio = algo.submissao
-		localStorage.setItem("cimspeUser", JSON.stringify(algo))
-		}).catch(erro =>{
-		console.log(erro.message)
-		});
-	window.location.reload(true)
-	const { classes } = props
-	var email = firebase.getCurrentUserEmail()
-	var envios = []
-	var newData = JSON.parse(localStorage.getItem("cimspeUser"))
-	console.log("dados: ", newData)
+    styles = theme => ({
+                root: {
+                    flexGrow: 1,
+                  },
+                paper: {
+                    padding: theme.spacing(3),
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    height: '100%'
+                },
+                grid:{
+                    padding: '0px'
+                },
+                submit: {
+                    marginTop: theme.spacing(3),
+                },
+                wrapper: {
+                    padding: theme.spacing(2)
+                }
+            })
 
-	if(!(newData === null)){
-		envios = newData.submissao
-	}
+    constructor(props){
+        super(props)
+        this.setState({userEmail: firebase.getCurrentUserEmail})
+    }
 
-	if(!firebase.getCurrentUsername()) {
-		// not logged in
-		alert('Realize login!')
-		props.history.replace('/')
-		return null
-	}
-	
-	return (
-		<div>
+    logout = async ()=> {
+        await firebase.logout()
+        this.props.history.push('/')
+    }
+
+    render() {
+        if(!firebase.getCurrentUsername()) {
+            // not logged in
+            alert('Realize login!')
+            this.props.history.replace('/')
+            return null
+        }
+
+        firebase.getCurrentUserSubmissions().then((algo)=>{
+            // userEnvio = algo.submissao
+            this.setState({userData: algo.submissao})
+            console.log(this.state)
+          }).catch(erro =>{
+            console.log(erro.message)
+          }); 
+
+        return ( 
+            <div>
 			<Toolbar style={{background: '#3f51b5',
 						
 						}} variant='dense'>
@@ -63,15 +67,15 @@ const HomePage = (props) => {
 					style={{marginLeft:'auto',
 					color:'white'}}
 					type="submit"
-					onClick={logout}
+					onClick={this.logout}
 					>
 					Sair
 					</Button>
 			</Toolbar>
-			<div className={classes.wrapper}>
-			<Grid className={classes.grid} alignItems='stretch' container spacing={2} direction="row">
+			<div style={this.styles.wrapper}>
+			<Grid style={this.styles.grid} alignItems='stretch' container spacing={2} direction="row">
 				<Grid item xs={6}>
-				<Paper className={classes.paper}>
+				<Paper style={this.styles.paper}>
 					<Typography component="h1" variant="h5">
 						Submissão de trabalhos
 					</Typography>
@@ -84,13 +88,13 @@ const HomePage = (props) => {
 						color="secondary"
 						component={Link}
 						to="/submeterTrabalhos"
-						className={classes.submit}>
+						style={this.styles.submit}>
 						Enviar Trabalhos
 					</Button>
 				</Paper>
 				</Grid>
 				<Grid item xs={6} >
-				<Paper className={classes.paper}>
+				<Paper style={this.styles.paper}>
 					<Typography component="h1" variant="h5">
 						Orientações aos autores
 					</Typography>
@@ -101,16 +105,16 @@ const HomePage = (props) => {
 						variant="contained"
 						color="secondary"
 						href="https://drive.google.com/file/d/0BzRk5F8tbyz7Si1abUVaQlhrYVdLeFl1TkpOZDRKb0d6WWpJ/view"
-						className={classes.submit}
+						style={this.styles.submit}
 						target='_blank'>
 						Download
 					</Button>
 				</Paper>
 				</Grid>
 				</Grid>
-				<Grid className={classes.grid} container spacing={2} direction="row">
+				<Grid style={this.styles.grid} container spacing={2} direction="row">
 				<Grid item xs={11} sm={6}>
-				<Paper className={classes.paper}>
+				<Paper style={this.styles.paper}>
 					<Typography style={{marginBottom:'15px'}} component="h1" variant="h5">
 						Informes para confecção de poster
 					</Typography>
@@ -133,25 +137,25 @@ const HomePage = (props) => {
 				</Paper>
 				</Grid>
 				<Grid item xs={11} sm={6}>
-				<Paper className={classes.paper}>
+				<Paper style={this.styles.paper}>
 					<Typography style={{marginBottom:'15px'}} component="h1" variant="h5">
 						Dados
 					</Typography>
 					<div>
 						<ul>
 							<li>
-								<h3>E-mail: {email}</h3>
+								<h3>E-mail: {this.state.userEmail}</h3>
 							</li>
 							<li>
-								<h3>Submissões: {envios ? envios.length : 0}/2</h3>
+								<h3>Submissões: {this.state.userData ? this.state.userData.length : 0}/2</h3>
 							</li>
 							<li>
-								<h3>Envios 1:</h3> 
-								<h4>{envios[0] ? envios[0].arquivo : 'Ainda não há envio'}</h4>
+								<h3>Envio 1:</h3> 
+								<h4>{this.state.userData[0] ? this.state.userData[0].arquivo : 'Ainda não há envio'}</h4>
 							</li>
 							<li>
 								<h3>Envio 2:</h3> 
-								<h4>{envios[1] ? envios[1].arquivo : 'Ainda não há envio'}</h4>
+								<h4>{this.state.userData[1] ? this.state.userData[1].arquivo : 'Ainda não há envio'}</h4>
 							</li>
 						</ul>
 					</div>
@@ -160,14 +164,8 @@ const HomePage = (props) => {
 			</Grid>
 			</div>
 		</div>
-	)
-
-	async function logout() {
-		await firebase.logout()
-		localStorage.clear();
-		props.history.push('/')
-	}
-
+         );
+    }
 }
-
-export default withRouter(withStyles(styles)(HomePage))
+ 
+export default withRouter(Home);
