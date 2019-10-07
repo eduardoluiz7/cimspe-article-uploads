@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef, useState} from 'react'
 import { Typography, Paper, Grid, Button, Toolbar } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import firebase from '../../firebase/firebase'
@@ -27,22 +27,20 @@ const styles = theme => ({
 })
 
 const HomePage = (props) => {
-	firebase.getCurrentUserSubmissions().then((algo)=>{
-		// userEnvio = algo.submissao
-		localStorage.setItem("cimspeUser", JSON.stringify(algo))
-		}).catch(erro =>{
-		console.log(erro.message)
-		});
-	window.location.reload(true)
+	const [stado, setStado] = useState('')
 	const { classes } = props
+	const userData = useRef({})
 	var email = firebase.getCurrentUserEmail()
-	var envios = []
-	var newData = JSON.parse(localStorage.getItem("cimspeUser"))
-	console.log("dados: ", newData)
+		firebase.getCurrentUserSubmissions().then((algo)=>{
+			console.log(algo)
+			userData.current = algo
+			console.log(userData.current.submissao.length)
+			setStado(' ') 
+			}).catch(erro =>{
+			console.log(erro.message)
+			});
 
-	if(!(newData === null)){
-		envios = newData.submissao
-	}
+
 
 	if(!firebase.getCurrentUsername()) {
 		// not logged in
@@ -79,7 +77,6 @@ const HomePage = (props) => {
 						Realize sua submissão
 					</Typography>
 					<Button
-					
 						variant="contained"
 						color="secondary"
 						component={Link}
@@ -143,15 +140,15 @@ const HomePage = (props) => {
 								<h3>E-mail: {email}</h3>
 							</li>
 							<li>
-								<h3>Submissões: {envios ? envios.length : 0}/2</h3>
+								<h3>Submissões: { userData.current.submissao? userData.current.submissao.length : 0}/2</h3>
 							</li>
 							<li>
 								<h3>Envios 1:</h3> 
-								<h4>{envios[0] ? envios[0].arquivo : 'Ainda não há envio'}</h4>
+								<h4>{ (typeof userData.current.submissao !== "undefined") && (userData.current.submissao.length>0) ? userData.current.submissao[0].arquivo : "Ainda não há envio"}</h4>
 							</li>
 							<li>
 								<h3>Envio 2:</h3> 
-								<h4>{envios[1] ? envios[1].arquivo : 'Ainda não há envio'}</h4>
+								<h4>{ (typeof userData.current.submissao !== "undefined") && (userData.current.submissao.length>1) ? userData.current.submissao[1].arquivo : "Ainda não há envio"}</h4>
 							</li>
 						</ul>
 					</div>
