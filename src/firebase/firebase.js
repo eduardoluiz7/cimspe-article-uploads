@@ -78,6 +78,10 @@ class Firebase {
 	fazStorage(file){
 		return this.storage.ref(`submissoes/${this.auth.currentUser.uid}/${file.name}`).put(file)
 	}
+
+	resetPassword(email){
+		return this.auth.sendPasswordResetEmail(email)
+	}
 }
 
 export default new Firebase()

@@ -4,6 +4,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { withRouter } from 'react-router-dom'
 import firebase from '../../firebase/firebase'
+// import Cadastro from './usersCads'
 
 const styles = theme => ({
 	main: {
@@ -37,15 +38,29 @@ const styles = theme => ({
 	},
 });
 
+
 function SignIn(props) {
 	const { classes } = props
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
+	const forgotPassword = (email) =>{
+		if(email ===''){
+			alert("Digite o email!")
+		}else{
+			firebase.resetPassword(email).then(()=>{
+				alert("Email de verificação enviado. Verifique seu e-mail!")
+				console.log('ok')
+			}).catch(erro =>{
+				alert("Usuário não cadastrado ou com pagamento ainda em processamento")
+			})
+		}
+	}
 
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
+				
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>
@@ -70,8 +85,17 @@ function SignIn(props) {
 						className={classes.submit}>
 						Entrar
           			</Button>
+					  <Button
+						fullWidth
+						variant="contained"
+						color="primary"
+						onClick={() => forgotPassword(email)}
+						className={classes.submit}>
+						Esqueci minha senha
+          			</Button>
 				</form>
 				<Typography style={{marginTop: '20px'}}>Novo aqui? <a style={{textDecoration: 'none', fontWeight: 'bold', color: '#f50057'}} href='http://cimspe.com/#inscricao'>Se inscreva!</a></Typography>
+				
 			</Paper>
 			<div style={{marginLeft: 'auto',
 				marginTop: '10px',
@@ -81,6 +105,7 @@ function SignIn(props) {
 			</div>
 		</main>
 	)
+
 
 	async function login() {
 		try {

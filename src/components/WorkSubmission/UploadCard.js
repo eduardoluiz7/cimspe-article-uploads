@@ -23,8 +23,11 @@ class UploadCard extends Component {
 
 
     firebase.getCurrentUserSubmissions().then((algo)=>{
-      if(!(typeof algo) === "undefined"){
+      console.log('cheguei')
+      if(!((typeof algo) === "undefined")){
         this.submissoes = algo.submissao
+        console.log(this.submissoes)
+        
       }
     }).catch(erro =>{
       console.log("We have an error: " + erro.message)
@@ -59,6 +62,7 @@ class UploadCard extends Component {
           tipo:this.state.tipo,
           data: new Date(),
           categoria: this.state.categoria})
+        console.log(this.submissoes)
 
         firebase.addSubmission({
           userName: firebase.getCurrentUsername(),
