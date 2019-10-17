@@ -4,8 +4,29 @@ import firebase from '../../firebase/firebase';
 
 class Cadastro extends Component {
 
+    
 
      users = [
+        {email: 'nathi_am@hotmail.com' , senha:'001665445' , nome: 'Nathalia'},
+        {email: 'simelone@outlook.com' , senha: '00nasf', nome: 'Simone'},
+        {email: 'nelsonfcjunior98@gmail.com' , senha: '10bc20de', nome:'NELSON' },
+        {email:'lucassdsnt00@gmail.com' , senha: '@lc3sDay.00', nome: 'Lucas'},
+        {email: 'giovannaamaral23@gmail.com' , senha: 'dKS6ma8X7GSJqUN' , nome: 'Giovanna'},
+        {email: 'jordanagomespaulino@gmail.com' , senha: 'floresdoamanha' , nome: 'Jordana'},
+        {email: 'rafaelaalves252@gmail.com' , senha: 'rafa0710' , nome:'Rafaela' },
+        {email: 'arianaasantos98@hotmail.com', senha: '01082018fisio', nome: 'ARIANA'},
+        {email: 'mcalassa97@gmail.com', senha: 'marina544', nome:'Marina' },
+        {email: 'camilaoliveiramr@outlook.com', senha: '150405', nome: 'Camila'}, //obs de novo
+        {email: 'simelone@outlook.com' , senha: 'Nicollas', nome: 'Simone'},
+        {email: 'andersonluissilvalobo@gmail.com' , senha: 'Yzz271318' , nome:'Anderson' },
+        {email: 'julia.c.masiero@hotmail.com', senha: 'jujuba12' , nome: 'Júlia'},
+        {email: 'ninasuzigan@gmail.com', senha: 'Ninoca@2001', nome:'Nina' },
+        {email: 'julianaprado.bio@gmail.com', senha: '98minutos' , nome: 'Juliana'},
+        {email: 'ana.leobas1899@gmail.com' , senha: 'aml123@' , nome: 'Ana'},
+        {email: 'isadora-alves@hotmail.com' , senha: 'isadora2710', nome: 'Isadora'},
+        {email: 'eduardokesley@hotmail.com.br' , senha: 'guloseimas477' , nome: 'Eduardo'},
+        {email: 'moemaassuncao@hotmail.com', senha: 'amar0805' , nome:'Moema'  },
+        {email: 'vini.g.r997@gmail.com', senha: 'vini1997' , nome: 'Vinicius' },
 
         {email: 'livialocio97@gmail.com', senha: '38741239', nome: 'Lívia'},
          {email: 'vitoriacarreiro3@gmail.com', senha: '30140207', nome: 'Vitória'},
@@ -59,8 +80,7 @@ class Cadastro extends Component {
 
     constructor(props){
         super(props)
-            this.register(this.users[0])
-           
+            this.register(this.users[19])
     }
     async register(item){
         try{
