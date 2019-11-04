@@ -134,6 +134,9 @@ const HomePage = (props) => {
 					<Typography style={{marginBottom:'15px'}} component="h1" variant="h5">
 						Dados
 					</Typography>
+					<Typography component="h1" variant="body1">
+						Apenas os dois últimos envios serão aceitos
+					</Typography>
 					<div>
 						<ul>
 							<li>

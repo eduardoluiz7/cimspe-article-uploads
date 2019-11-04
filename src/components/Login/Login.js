@@ -60,6 +60,7 @@ function SignIn(props) {
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
+
 				<Avatar className={classes.avatar}>
 					<LockOutlinedIcon />
 				</Avatar>

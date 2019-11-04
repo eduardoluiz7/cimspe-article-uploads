@@ -58,17 +58,22 @@ class UploadCard extends Component {
         alert("Insira um arquivo e o tipo de submissão")
       }else{
 
-        this.submissoes.push({arquivo: this.state.file.name,
+        var subs = []
+        if(this.submissoes.length >= 0){
+          subs.push(this.submissoes[this.submissoes.length -1])
+        }
+        
+        subs.push({arquivo: this.state.file.name,
           tipo:this.state.tipo,
           data: new Date(),
           categoria: this.state.categoria})
-        console.log(this.submissoes)
+        console.log(subs)
 
         firebase.addSubmission({
           userName: firebase.getCurrentUsername(),
           userId: firebase.getCurrentUserId(),
           email: firebase.getCurrentUserEmail(),
-          submissao: this.submissoes
+          submissao: subs
         }).then(()=>{
 
           console.log("saved")

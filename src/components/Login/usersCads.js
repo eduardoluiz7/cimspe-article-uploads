@@ -4,9 +4,39 @@ import firebase from '../../firebase/firebase';
 
 class Cadastro extends Component {
 
-    
 
      users = [
+
+
+
+        
+        
+
+        //VERIFICAR SE PAGOU:
+
+
+        {email: 'thafalcao1@gmail.com', senha: 'tata2810', nome: 'THAIS' },
+        {email: 'moiramagno@yahoo.com.br', senha: 'moiralinda1', nome: 'Moira' },
+        {email: 'luiza.chahini@gmail.com', senha: 'chahini1997!', nome: 'Luiza' },
+
+
+
+        //
+
+
+
+
+        {email: 'letymp2014@gmail.com' , senha:'21062000' , nome: 'Letícia'},
+        {email: 'viviandivina30@gmail.com' , senha:'vivian30' , nome: 'Vivian'},
+        {email: 'thaynalacerda955@gmail.com' , senha:'Embrioufpe' , nome: 'Thayná'},
+        {email: 'orlando_morais@outlook.com' , senha:'orlandomorais123' , nome: 'Orlando'},
+        {email: 'adriellenunes@outlook.com.br' , senha:'adriellenunes123' , nome: 'Adrielle'},
+        {email: 'zildalacerda@gmail.com' , senha:'e576127' , nome: 'MARIA'},
+        {email: 'p.junior1970@gmail.com' , senha:'132245' , nome: 'Péricles'},
+
+
+
+
         {email: 'nathi_am@hotmail.com' , senha:'001665445' , nome: 'Nathalia'},
         {email: 'simelone@outlook.com' , senha: '00nasf', nome: 'Simone'},
         {email: 'nelsonfcjunior98@gmail.com' , senha: '10bc20de', nome:'NELSON' },
@@ -80,7 +110,7 @@ class Cadastro extends Component {
 
     constructor(props){
         super(props)
-            this.register(this.users[19])
+            this.register(this.users[2])
     }
     async register(item){
         try{
